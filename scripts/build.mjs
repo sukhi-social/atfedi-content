@@ -14,7 +14,9 @@
 // paragraph — the same check the translation desk shows in its gutter.
 //
 // dist/ holds every file as-is plus index.json:
-//   { generated, docs: [{ doc, title: {lang}, files: {lang: {path, sha256}} }] }
+//   { generated, docs: [{ doc, title: {lang}, lead: {lang}, files: {lang: {path, sha256}} }] }
+// `lead` is the paragraph right after the title, on one line — the site uses
+// it for cards that link to the page.
 
 import { createHash } from 'node:crypto';
 import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
@@ -58,8 +60,11 @@ for (const file of walk(contentDir)) {
   const markdown = readFileSync(file, 'utf8');
   const title = markdown.match(/^## (.+)$/m)?.[1];
   if (!title) error(`content/${rel}`, 'the page needs a "## Title" line');
-  const entry = docs.get(doc) ?? { doc, title: {}, files: {}, text: {} };
+  const entry = docs.get(doc) ?? { doc, title: {}, lead: {}, files: {}, text: {} };
   entry.title[lang] = title ?? doc;
+  const blocks = paragraphs(markdown).map(unwrap);
+  const at = blocks.findIndex((b) => b.startsWith('## '));
+  entry.lead[lang] = (at >= 0 && blocks[at + 1] && !blocks[at + 1].startsWith('#') ? blocks[at + 1] : '').trim();
   entry.files[lang] = {
     path: `content/${rel}`,
     sha256: createHash('sha256').update(markdown).digest('hex'),
@@ -100,7 +105,7 @@ if (checkOnly) process.exit(0);
 rmSync(out, { recursive: true, force: true });
 const index = [...docs.values()]
   .sort((a, b) => a.doc.localeCompare(b.doc))
-  .map(({ doc, title, files }) => ({ doc, title, files }));
+  .map(({ doc, title, lead, files }) => ({ doc, title, lead, files }));
 for (const d of docs.values()) {
   for (const lang of Object.keys(d.files)) {
     const target = join(out, d.files[lang].path);
