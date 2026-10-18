@@ -8,7 +8,11 @@
 // languages, named by its path without the language: tool-pages/fedify/index.
 //
 // Errors (the build fails): a file that doesn't fit the layout, an unknown
-// language, a page without its `## Title` line, a doc missing a language.
+// language, a page without its `## Title` line, a doc missing a language, a
+// picture that isn't in media/ or isn't named by its own sha256.
+//
+// Pictures live in media/<sha256>.<webp|png|jpg|gif> and pages point at them
+// as ![alt](/media/<name>). The desk names and commits them this way.
 // Notices (the build goes on): a translation that lost a link, icon, code
 // span, heading level or list item the other languages have, paragraph by
 // paragraph — the same check the translation desk shows in its gutter.
@@ -17,9 +21,17 @@
 //   { generated, docs: [{ doc, title: {lang}, lead: {lang}, files: {lang: {path, sha256}} }] }
 // `lead` is the paragraph right after the title, on one line — the site uses
 // it for cards that link to the page.
+//
+// Each file also carries its credits, read from git history (CI checks out
+// the whole history for this):
+//   credits: { authors: [{ name, ai }], assisted: [name] }
+// authors are commit authors, oldest first; ai marks an AI (Claude's commits
+// are authored as Claude <noreply@anthropic.com>). assisted collects the
+// "Assisted-by:" trailers the desk adds when someone rewrites an AI's text.
 
+import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
-import { mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import { copyFileSync, existsSync, mkdirSync, readdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
 import { dirname, join, relative } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { paragraphs, unwrap, check } from './markdown.mjs';
@@ -33,6 +45,33 @@ const contentDir = join(root, 'content');
 const out = join(root, 'dist');
 const checkOnly = process.argv.includes('--check');
 const inCI = !!process.env.GITHUB_ACTIONS;
+
+// commit emails that mean an AI wrote it, and the name it goes by
+const AI_AUTHORS = { 'noreply@anthropic.com': 'Claude' };
+
+function credits(path) {
+  let log;
+  try {
+    log = execFileSync(
+      'git',
+      ['log', '--reverse', '--format=%an%x1f%ae%x1f%(trailers:key=Assisted-by,valueonly,separator=%x1e)%x1d', '--', path],
+      { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
+    );
+  } catch {
+    return null; // not a git checkout
+  }
+  const authors = new Map();
+  const assisted = new Set();
+  for (const entry of log.split('\x1d')) {
+    const [name, email, trailers] = entry.trim().split('\x1f');
+    if (!name) continue;
+    const ai = AI_AUTHORS[email];
+    const key = ai ?? name;
+    if (!authors.has(key)) authors.set(key, { name: key, ai: !!ai });
+    for (const t of (trailers ?? '').split('\x1e')) if (t.trim()) assisted.add(t.trim());
+  }
+  return authors.size ? { authors: [...authors.values()], assisted: [...assisted] } : null;
+}
 
 const errors = [];
 const notices = [];
@@ -68,9 +107,27 @@ for (const file of walk(contentDir)) {
   entry.files[lang] = {
     path: `content/${rel}`,
     sha256: createHash('sha256').update(markdown).digest('hex'),
+    credits: credits(`content/${rel}`),
   };
   entry.text[lang] = markdown;
   docs.set(doc, entry);
+}
+
+const mediaDir = join(root, 'media');
+const media = existsSync(mediaDir) ? readdirSync(mediaDir) : [];
+for (const name of media) {
+  const m = name.match(/^([0-9a-f]{64})\.(webp|png|jpg|gif)$/);
+  if (!m) error(`media/${name}`, 'expected media/<sha256>.<webp|png|jpg|gif>');
+  else if (createHash('sha256').update(readFileSync(join(mediaDir, name))).digest('hex') !== m[1]) {
+    error(`media/${name}`, "the name isn't the sha256 of the file");
+  }
+}
+for (const d of docs.values()) {
+  for (const lang of Object.keys(d.text)) {
+    for (const [, name] of d.text[lang].matchAll(/\/media\/([^)\s"]+)/g)) {
+      if (!media.includes(name)) error(d.files[lang].path, `picture /media/${name} is not in media/`);
+    }
+  }
 }
 
 for (const d of docs.values()) {
@@ -106,6 +163,8 @@ rmSync(out, { recursive: true, force: true });
 const index = [...docs.values()]
   .sort((a, b) => a.doc.localeCompare(b.doc))
   .map(({ doc, title, lead, files }) => ({ doc, title, lead, files }));
+mkdirSync(join(out, 'media'), { recursive: true });
+for (const name of media) copyFileSync(join(mediaDir, name), join(out, 'media', name));
 for (const d of docs.values()) {
   for (const lang of Object.keys(d.files)) {
     const target = join(out, d.files[lang].path);

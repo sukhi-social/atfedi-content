@@ -24,6 +24,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # the credits come from git history
       - uses: actions/setup-node@v4
         with:
           node-version: 22
@@ -36,8 +38,10 @@ jobs:
           ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
           BUCKET: ${{ vars.R2_BUCKET }}
         run: |
-          # markdown first, then the index that points at it, so a reader
-          # never sees an index naming a file that isn't there yet
+          # pictures, then markdown, then the index that points at them, so a
+          # reader never sees a page or index naming a file that isn't there yet
+          aws s3 sync dist/media "s3://$BUCKET/media" --endpoint-url "$ENDPOINT" \
+            --delete --cache-control "public, max-age=31536000, immutable"
           aws s3 sync dist/content "s3://$BUCKET/content" --endpoint-url "$ENDPOINT" \
             --delete --content-type "text/markdown; charset=utf-8" --cache-control "no-cache"
           aws s3 cp dist/index.json "s3://$BUCKET/index.json" --endpoint-url "$ENDPOINT" \
