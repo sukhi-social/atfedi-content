@@ -1,0 +1,44 @@
+# Merging to main is the deploy: build dist/ and mirror it into the R2
+# bucket the site reads from. Files removed here are removed there too.
+#
+# Needs, in this repository's settings:
+#   secrets  R2_ACCOUNT_ID, R2_ACCESS_KEY_ID, R2_SECRET_ACCESS_KEY
+#            (an R2 API token with Object Read & Write on the bucket only)
+#   variable R2_BUCKET (e.g. atfedi-content)
+name: deploy
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: deploy
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+      - run: node scripts/build.mjs
+      - name: Sync to R2
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.R2_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.R2_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: auto
+          ENDPOINT: https://${{ secrets.R2_ACCOUNT_ID }}.r2.cloudflarestorage.com
+          BUCKET: ${{ vars.R2_BUCKET }}
+        run: |
+          # markdown first, then the index that points at it, so a reader
+          # never sees an index naming a file that isn't there yet
+          aws s3 sync dist/content "s3://$BUCKET/content" --endpoint-url "$ENDPOINT" \
+            --delete --content-type "text/markdown; charset=utf-8" --cache-control "no-cache"
+          aws s3 cp dist/index.json "s3://$BUCKET/index.json" --endpoint-url "$ENDPOINT" \
+            --content-type "application/json; charset=utf-8" --cache-control "no-cache"
