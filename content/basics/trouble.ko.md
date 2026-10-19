@@ -8,7 +8,6 @@
 
 - [icon:camera] 계속 괴롭힘을 당하고 있다면, 차단하기 전에 글을 캡처하고 링크를 적어 두세요. 차단하면 그 사람의 글이 보이지 않게 돼서, 나중에 신고할 때 찾기 어려워요.
 - [icon:flag] 신고는 차단과 함께 해도 돼요. 신고는 내 서버의 운영진에게 가요.
-- [icon:phone] 몸이나 생명이 위험하다고 느낀다면, 연합우주 안에서 해결하려고 하지 말고 경찰(112)에 연락해 주세요. 마음이 너무 힘들 때는 자살예방상담전화(109)에서 24시간 이야기를 들어 줘요.
 
 ### 뮤트, 차단, 신고
 
@@ -49,4 +48,5 @@
 :::cards
 - [icon:book-open] **마스토돈 공식 안내** — 뮤트, 차단, 신고 — [안내 읽기](https://docs.joinmastodon.org/user/moderating/)
 - [icon:arrow-right] **서버 이사** — 다른 서버로 옮길 때 — [읽기](/basics/moving)
+- [icon:life-buoy] **Find A Helpline** — 혼자 견디기 힘들 때 이야기할 곳 — [찾아보기](https://findahelpline.com)
 :::

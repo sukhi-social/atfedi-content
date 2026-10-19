@@ -8,7 +8,6 @@ If someone is making you uncomfortable, you can mute or block them right now. Th
 
 - [icon:camera] If the harassment keeps coming, screenshot the posts and save their links before you block. Once you block someone, their posts disappear from your view, which makes them harder to find when you report.
 - [icon:flag] You can report and block at the same time. Reports go to the moderators of your own server.
-- [icon:phone] If you feel your body or your life is in danger, don't try to handle it inside the fediverse. Call your local emergency number. If you're in crisis, [Find A Helpline](https://findahelpline.com) lists free, confidential lines in many countries.
 
 ### Mute, block, report
 
@@ -49,4 +48,5 @@ Your own server's moderators are usually the quickest people to ask. If you're n
 :::cards
 - [icon:book-open] **Mastodon documentation** — muting, blocking, reporting — [Read the guide](https://docs.joinmastodon.org/user/moderating/)
 - [icon:arrow-right] **Moving servers** — when you want to go elsewhere — [Read](/basics/moving)
+- [icon:life-buoy] **Find A Helpline** — someone to talk to when it's too much — [Find one](https://findahelpline.com)
 :::

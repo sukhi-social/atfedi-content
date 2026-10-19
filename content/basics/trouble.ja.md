@@ -8,7 +8,6 @@
 
 - [icon:camera] くり返し嫌がらせを受けているなら、ブロックする前に投稿のスクリーンショットを撮り、リンクを控えておきます。ブロックすると相手の投稿が見えなくなり、あとで通報するときに探しにくくなります。
 - [icon:flag] 通報は、ブロックといっしょにしてかまいません。通報は自分のサーバーの運営者に届きます。
-- [icon:phone] 体や命の危険を感じたら、フェディバースの中で片づけようとせず、警察（110）に連絡してください。気持ちがつらくて限界のときは、[まもろうよ こころ](https://www.mhlw.go.jp/mamorouyokokoro/)に電話やSNSの相談窓口がまとまっています。
 
 ### ミュート、ブロック、通報
 
@@ -49,4 +48,5 @@
 :::cards
 - [icon:book-open] **Mastodon 公式ガイド** — ミュート、ブロック、通報 — [ガイドを読む](https://docs.joinmastodon.org/user/moderating/)
 - [icon:arrow-right] **サーバーのお引っ越し** — ほかのサーバーへ移るとき — [読む](/basics/moving)
+- [icon:life-buoy] **まもろうよ こころ** — ひとりで抱えるのがつらいときの相談先 — [見てみる](https://www.mhlw.go.jp/mamorouyokokoro/)
 :::
