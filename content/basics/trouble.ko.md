@@ -48,5 +48,5 @@
 :::cards
 - [icon:book-open] **마스토돈 공식 안내** — 뮤트, 차단, 신고 — [안내 읽기](https://docs.joinmastodon.org/user/moderating/)
 - [icon:arrow-right] **서버 이사** — 다른 서버로 옮길 때 — [읽기](/basics/moving)
-- [icon:life-buoy] **Find A Helpline** — 혼자 견디기 힘들 때 이야기할 곳 — [찾아보기](https://findahelpline.com)
+- [icon:life-buoy] **Find A Helpline** — 혼자 견디기 힘들 때 이야기할 곳 — [찾아보기](https://findahelpline.com/ko-KR/countries/kr)
 :::
