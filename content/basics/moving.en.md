@@ -44,6 +44,14 @@ These follow Mastodon. Misskey works the same way at heart: add an alias on the 
 - [icon:shield-check] **Export now and then.** If a server shuts down suddenly, moving gets hard. Keeping recent CSVs around is part of the basics too.
 - [icon:server] **Different software usually works.** Moving followers between Mastodon and Misskey mostly works in both directions, though it can vary by server.
 
+### If your server is closing
+
+- [icon:triangle-alert] **After the server closes, your followers can't be moved.** A move works because your old server tells everyone "this account has moved over there." A closed server can't send that. Export files can only be downloaded while the server is up, too.
+
+There's no need to rush on a rumor. Check the closing date in the admins' announcement or on the server's about page (`/about`), and move before then using the steps above. Servers listed on joinmastodon.org promise at least 3 months' notice before shutting down. Others may close with little warning. Pin a post with your new address on the old account, so people who missed the move notice can still find you until the server closes.
+
+If it's already gone, your followers can't be moved. If you have a CSV from before, import it on your new account to follow everyone again. Without one, search for the people you remember and follow them again. They'll get a notification, and many will follow you back.
+
 :::cards
 - [icon:book-open] **Mastodon's own guide** — moving, exporting, and importing — [Read the guide](https://docs.joinmastodon.org/user/moving/)
 - [icon:map] **joinfediverse.kr** — for choosing your next town — [Look around](https://joinfediverse.kr)
