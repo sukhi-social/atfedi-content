@@ -41,6 +41,8 @@
 
 서버의 규칙과 운영진은 보통 그 서버의 소개 페이지(`/about`)에서 볼 수 있어요.
 
+일이 연합우주 밖으로 번졌다면, 경찰이나 병원 같은 바깥 기관에 도움을 청하는 것도 한 가지 방법이에요.
+
 ### 더 물어보고 싶다면
 
 먼저 내 서버의 운영진에게 물어보는 것이 가장 빨라요. 어디에 물어야 할지 모르겠다면, atfedi.de 아래쪽에 적힌 연락처로 알려 주세요. 작은 일이라도 괜찮아요.
@@ -48,5 +50,4 @@
 :::cards
 - [icon:book-open] **마스토돈 공식 안내** — 뮤트, 차단, 신고 — [안내 읽기](https://docs.joinmastodon.org/user/moderating/)
 - [icon:arrow-right] **서버 이사** — 다른 서버로 옮길 때 — [읽기](/basics/moving)
-- [icon:life-buoy] **Find A Helpline** — 혼자 견디기 힘들 때 이야기할 곳 — [찾아보기](https://findahelpline.com/ko-KR/countries/kr)
 :::

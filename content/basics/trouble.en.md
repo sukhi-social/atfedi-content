@@ -41,6 +41,8 @@ If your reports go unanswered, or the server's rules don't fit you, it's fine to
 
 A server's rules and moderators are usually listed on its about page (`/about`).
 
+If things have spilled outside the fediverse, going to the police or a doctor is one more option.
+
 ### If you want to ask more
 
 Your own server's moderators are usually the quickest people to ask. If you're not sure who to ask, write to the contacts at the bottom of atfedi.de. Small things are welcome too.
@@ -48,5 +50,4 @@ Your own server's moderators are usually the quickest people to ask. If you're n
 :::cards
 - [icon:book-open] **Mastodon documentation** — muting, blocking, reporting — [Read the guide](https://docs.joinmastodon.org/user/moderating/)
 - [icon:arrow-right] **Moving servers** — when you want to go elsewhere — [Read](/basics/moving)
-- [icon:life-buoy] **Find A Helpline** — someone to talk to when it's too much — [Find one](https://findahelpline.com)
 :::
