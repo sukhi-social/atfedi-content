@@ -12,6 +12,8 @@ All three are in the menu (⋯) on a post or a profile. None of them notifies th
 - [icon:ban] Block: their follow is removed, and their replies and mentions no longer reach you. Your public posts can still be read without logging in, so a block doesn't hide them completely.
 - [icon:flag] Report: your server's moderators look at it and decide. If the person is on another server, you can choose to forward the report to that server's moderators too. Forwarded reports don't include your name.
 
+If you'd rather not keep seeing their posts but don't want to end things, unfollowing or using lists works well too. Unfollowing someone doesn't mean ending the relationship.
+
 When you report, attach the posts in question and add a line or two on what happened, just as it happened. It helps the moderators decide. Blocking hides their posts from you, so report first, or save the links before you block.
 
 ### Keeping a whole server at a distance
@@ -46,7 +48,7 @@ If your reports go unanswered, or the server's rules don't fit you, it's fine to
 
 A server's rules and moderators are usually listed on its about page (`/about`).
 
-If things have spilled outside the fediverse, going to the police or a doctor is one more option.
+If things have spilled outside the fediverse, going to the police or a doctor is one more option, and a good one.
 
 ### If you want to ask more
 
