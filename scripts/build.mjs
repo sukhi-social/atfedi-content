@@ -28,6 +28,16 @@
 // authors are commit authors, oldest first; ai marks an AI (Claude's commits
 // are authored as Claude <noreply@anthropic.com>). assisted collects the
 // "Assisted-by:" trailers the desk adds when someone rewrites an AI's text.
+//
+// What the site shows is what a person passed through write.atfedi.de: for
+// each file, the version from the last commit the desk made as someone
+// (author <user>@<server>.users.atfedi.de). An AI draft nobody has sent from
+// write yet stays off the site, and an AI's change after a person's send
+// waits for their next send, while the site keeps the version they sent.
+// The desk still reads the newest text, so there is something to rewrite:
+//   content/<path>             the newest text (the desk)
+//   published/content/<path>   the version people passed (the site)
+//   files[lang].published      { sha256, commit, title, lead, credits } or null
 
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -49,12 +59,18 @@ const inCI = !!process.env.GITHUB_ACTIONS;
 // commit emails that mean an AI wrote it, and the name it goes by
 const AI_AUTHORS = { 'noreply@anthropic.com': 'Claude' };
 
-function credits(path) {
+// the desk's commits are authored as <user>@<server>.users.atfedi.de
+const DESK_EMAIL = /\.users\.atfedi\.de$/;
+
+const git = (args) =>
+  execFileSync('git', args, { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'], maxBuffer: 1 << 26 });
+
+function credits(path, rev = 'HEAD') {
   let log;
   try {
     log = execFileSync(
       'git',
-      ['log', '--reverse', '--format=%an%x1f%ae%x1f%(trailers:key=Assisted-by,valueonly,separator=%x1e)%x1d', '--', path],
+      ['log', '--reverse', '--format=%an%x1f%ae%x1f%(trailers:key=Assisted-by,valueonly,separator=%x1e)%x1d', rev, '--', path],
       { cwd: root, encoding: 'utf8', stdio: ['ignore', 'pipe', 'ignore'] },
     );
   } catch {
@@ -71,6 +87,29 @@ function credits(path) {
     for (const t of (trailers ?? '').split('\x1e')) if (t.trim()) assisted.add(t.trim());
   }
   return authors.size ? { authors: [...authors.values()], assisted: [...assisted] } : null;
+}
+
+// The last commit that sent this file from write, and the file as it was
+// then; null when no one has yet.
+function passed(path) {
+  let log;
+  try {
+    log = git(['log', '--format=%H%x1f%ae', '--', path]);
+  } catch {
+    return null; // not a git checkout
+  }
+  for (const line of log.split('\n')) {
+    const [commit, email] = line.split('\x1f');
+    if (commit && DESK_EMAIL.test(email ?? '')) return { commit, text: git(['show', `${commit}:${path}`]) };
+  }
+  return null;
+}
+
+// the paragraph right after the `## Title`, on one line
+function leadOf(markdown) {
+  const blocks = paragraphs(markdown).map(unwrap);
+  const at = blocks.findIndex((b) => b.startsWith('## '));
+  return (at >= 0 && blocks[at + 1] && !blocks[at + 1].startsWith('#') ? blocks[at + 1] : '').trim();
 }
 
 const errors = [];
@@ -99,17 +138,24 @@ for (const file of walk(contentDir)) {
   const markdown = readFileSync(file, 'utf8');
   const title = markdown.match(/^## (.+)$/m)?.[1];
   if (!title) error(`content/${rel}`, 'the page needs a "## Title" line');
-  const entry = docs.get(doc) ?? { doc, title: {}, lead: {}, files: {}, text: {} };
+  const entry = docs.get(doc) ?? { doc, title: {}, lead: {}, files: {}, text: {}, published: {} };
   entry.title[lang] = title ?? doc;
-  const blocks = paragraphs(markdown).map(unwrap);
-  const at = blocks.findIndex((b) => b.startsWith('## '));
-  entry.lead[lang] = (at >= 0 && blocks[at + 1] && !blocks[at + 1].startsWith('#') ? blocks[at + 1] : '').trim();
+  entry.lead[lang] = leadOf(markdown);
+  const pass = passed(`content/${rel}`);
   entry.files[lang] = {
     path: `content/${rel}`,
     sha256: createHash('sha256').update(markdown).digest('hex'),
     credits: credits(`content/${rel}`),
+    published: pass && {
+      sha256: createHash('sha256').update(pass.text).digest('hex'),
+      commit: pass.commit,
+      title: pass.text.match(/^## (.+)$/m)?.[1] ?? title ?? doc,
+      lead: leadOf(pass.text),
+      credits: credits(`content/${rel}`, pass.commit),
+    },
   };
   entry.text[lang] = markdown;
+  if (pass) entry.published[lang] = pass.text;
   docs.set(doc, entry);
 }
 
@@ -155,7 +201,11 @@ for (const n of notices) {
 for (const e of errors) {
   console.log(inCI ? `::error file=${e.file}::${e.msg}` : `error   ${e.file}: ${e.msg}`);
 }
+const files = [...docs.values()].flatMap((d) => Object.values(d.files));
+const waiting = files.filter((f) => f.published?.sha256 !== f.sha256);
+for (const f of waiting) if (!inCI) console.log(`draft   ${f.path}: ${f.published ? 'changed since its last send from write' : 'not sent from write yet'}`);
 console.log(`${docs.size} docs, ${errors.length} errors, ${notices.length} notices`);
+console.log(`${files.length - waiting.length} of ${files.length} files are on the site as they are; the rest wait for a send from write`);
 if (errors.length) process.exit(1);
 if (checkOnly) process.exit(0);
 
@@ -164,12 +214,17 @@ const index = [...docs.values()]
   .sort((a, b) => a.doc.localeCompare(b.doc))
   .map(({ doc, title, lead, files }) => ({ doc, title, lead, files }));
 mkdirSync(join(out, 'media'), { recursive: true });
+mkdirSync(join(out, 'published', 'content'), { recursive: true });
 for (const name of media) copyFileSync(join(mediaDir, name), join(out, 'media', name));
 for (const d of docs.values()) {
   for (const lang of Object.keys(d.files)) {
     const target = join(out, d.files[lang].path);
     mkdirSync(dirname(target), { recursive: true });
     writeFileSync(target, d.text[lang]);
+    if (d.published[lang] == null) continue;
+    const shown = join(out, 'published', d.files[lang].path);
+    mkdirSync(dirname(shown), { recursive: true });
+    writeFileSync(shown, d.published[lang]);
   }
 }
 writeFileSync(join(out, 'index.json'), JSON.stringify({ generated: new Date().toISOString(), docs: index }, null, 1));
