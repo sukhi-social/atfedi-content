@@ -4,21 +4,15 @@ If someone is making you uncomfortable, you can mute or block them right now. Th
 
 [icon:footprints] Basics · [icon:server] Mastodon, Misskey, and more · [icon:shield-check] You can do this now
 
-### Who this is for
-
-We can't help everyone. But we can help people who are good to each other and who respect life.
-
-This guide is for those people, so they can keep their own corner of the fediverse comfortable. Please don't use it to harass anyone, or to get around a block and reach someone again.
-
 ### Three ways to keep your distance
 
-All three are in the menu (⋯) on a post or a profile. None of them notifies the other person.
+All three are in the menu (⋯) on a post or a profile. None of them notifies the other person, so there's no need to tell them.
 
-- [icon:volume-x] Mute: their posts stop showing up in your timelines. They can still follow you and see your posts. If you just need a break, mute for a set time.
+- [icon:volume-x] Mute: their posts stop showing up in your timelines. The follow stays, so it's a good fit when you want a break without ending things. You can set it to expire, too.
 - [icon:ban] Block: their follow is removed, and their replies and mentions no longer reach you. Your public posts can still be read without logging in, so a block doesn't hide them completely.
 - [icon:flag] Report: your server's moderators look at it and decide. If the person is on another server, you can choose to forward the report to that server's moderators too. Forwarded reports don't include your name.
 
-When you report, attach the posts in question. A line or two on what was wrong helps the moderators decide. Blocking hides their posts from you, so report first, or save the links before you block.
+When you report, attach the posts in question and add a line or two on what happened, just as it happened. It helps the moderators decide. Blocking hides their posts from you, so report first, or save the links before you block.
 
 ### Keeping a whole server at a distance
 
@@ -26,7 +20,7 @@ If several accounts from one server keep showing up, you can block that entire s
 
 - [icon:triangle-alert] **A domain block removes every follower you have on that server. Unblocking doesn't bring them back.**
 
-### Settings for a calmer space from the start
+### Settings that look after you
 
 These help before anything goes wrong, and when you're a little tired. Names are from Mastodon and vary a little from server to server.
 
@@ -35,6 +29,16 @@ These help before anything goes wrong, and when you're a little tired. Names are
 - [icon:eye-off] Post visibility: choose public, quiet public, followers only, or mentioned people only for each post. Mentioned-only posts (DMs) aren't encrypted, so your server's admins can read them.
 - [icon:filter] Keyword filters: hide posts containing words you don't want to see.
 - [icon:search] Search and discovery: keep your posts out of search, or hide who you follow.
+
+When you're worn out, it's fine to turn off notifications and step away for a few days. Your account and your people will still be there when you come back.
+
+### When someone near you seems to be having a hard time
+
+If you see someone being harassed, you can report those posts yourself. You don't have to be the one it's aimed at.
+
+A quiet message asking if they're okay can help too. Replying to the harasser, though, can pile more notifications on the person it's aimed at, so give it a second thought.
+
+When you write about something that might be heavy for others, add a content warning (CW) so readers can choose whether to open it.
 
 ### When your server isn't a fit
 
