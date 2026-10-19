@@ -39,6 +39,17 @@ You can edit the files here directly, or use
 and your language side by side, one paragraph per row. Sign in with any
 fediverse account.
 
+## What reaches the site
+
+A page shows on the site only once a person has sent it from
+[write.atfedi.de](https://write.atfedi.de) (or translate.atfedi.de). Drafts
+Claude writes here stay off the site until then, and so does any later change
+an AI makes: the site keeps the version the person sent until they send again.
+The desks always open the newest text, so there is something to rewrite.
+
+The build tells which commit is a send by its author, `<user>@<server>.users.atfedi.de`.
+`node scripts/build.mjs` lists the files still waiting.
+
 ## Checks and deploy
 
 ```sh
