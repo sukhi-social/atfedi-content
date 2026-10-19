@@ -8,7 +8,7 @@ If someone is making you uncomfortable, you can mute or block them right now. Th
 
 All three are in the menu (⋯) on a post or a profile. None of them notifies the other person, so there's no need to tell them.
 
-- [icon:volume-x] Mute: their posts stop showing up in your timelines. The follow stays, so it's a good fit when you want a break without ending things. You can set it to expire, too.
+- [icon:volume-x] Mute: their posts stop showing up in your timelines. Their replies and mentions to you won't show up in your notifications either. They won't know, and the follow stays. You can set it to expire, too. If you'd like to see less of their posts but still get their replies, unfollowing them instead of muting is another way.
 - [icon:ban] Block: their follow is removed, and their replies and mentions no longer reach you. Your public posts can still be read without logging in, so a block doesn't hide them completely.
 - [icon:flag] Report: your server's moderators look at it and decide. If the person is on another server, you can choose to forward the report to that server's moderators too. Forwarded reports don't include your name.
 
