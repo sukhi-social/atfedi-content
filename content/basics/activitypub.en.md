@@ -1,55 +1,48 @@
-## What is ActivityPub?
+## The fediverse and ActivityPub, for newcomers
 
-ActivityPub is an agreement that lets people on different servers talk to each other. Mastodon, Misskey and others follow it, so you can follow people and reply across servers. It does not promise that a server stays open, that a post always arrives, or that a deleted post disappears everywhere.
+It is a place where you post, like, and talk with people, much like Twitter. The difference is that it is not one company's server. Many servers are connected to each other. Join a server (a town) you like, and you can still follow people and reply across servers. The agreement that connects them is called ActivityPub, and the whole connected space is called the fediverse.
 
-[icon:footprints] Basics · [icon:server] Mastodon, Misskey and others · [icon:book-open] Promises and limits
+[icon:footprints] Basics · [icon:server] Mastodon, Misskey and others · [icon:users] People and culture
 
-### In one line
+### What is nice about it?
 
-Most social networks run on one company's servers. In the fediverse there are many servers, and each one passes posts to the others using the same agreement. That agreement is called ActivityPub.
+- [icon:map-pin] **You can pick your town.** You choose a server whose mood and rules suit you. Some have lots of artists, some are casual places to chat in your own language, some are quiet. It differs from server to server.
+- [icon:repeat] **You can move if it does not suit you.** When you move, your followers come with you. So you do not need to think too long about the first pick. The steps are in [Moving servers](/basics/moving).
+- [icon:door-open] **You can talk with people in other towns.** Different servers, same conversations: you can follow and reply.
+- [icon:shield-check] **You can see who runs things.** Each server has admins who set and keep the rules. If something goes wrong, you can tell your server's admin.
 
-That is why you can pick a server. Whichever one you sign up on, you can still talk with people on other servers.
+### Good to know
 
-### How do they talk?
+- **Addresses look like `@name@server`.** The server name is part of it. Your account belongs to that server.
+- **Rules differ by server.** Read the server's about page before you join.
+- **ActivityPub does not promise everything.** The spec says there is no guarantee that another server stays open, no guarantee that a post always arrives, and no way to force a post on another server to be deleted. So a deleted post may linger somewhere.
+- **Servers can close.** That is why some servers make their own promises. Servers listed under the Mastodon [Server Covenant](https://joinmastodon.org/covenant) agree to daily backups and at least three months' notice before closing.
+- **Search does not work like Twitter's.** There is no single place that finds every post, so hashtags help when you look for things.
 
-Your account lives on a server. The spec says an account has a place where it sends posts (an outbox) and a place where it receives them (an inbox). When you post, your server sends the post to the inboxes on the servers where your followers are. Replies and likes come back the same way.
+### What is the culture like?
 
-An account address looks like `@name@server`. The server name is in it because the account belongs to that server.
+It differs by server. Here is what you see in many places.
 
-### What it promises, and what it does not
+- [icon:hash] **People use hashtags a lot.** Follow a hashtag you like and posts on that topic gather for you.
+- [icon:eye-off] **People use content warnings (CW).** Heavy topics, spoilers and the like are folded away first, as a courtesy.
+- [icon:image] **People describe their images (alt text).** So people who use screen readers can follow them too.
+- [icon:hand-heart] **Newcomers introduce themselves.** In many places a hello with a hashtag gets a welcome.
+- [icon:scale] **People read the rules and keep them.** The code of conduct on a server writes down what people should do anyway. It is there so everyone can be comfortable.
 
-The Social Web Protocols document from the W3C says users can keep their data on "any number of" servers and use apps hosted elsewhere. Being able to choose a server, and to talk across servers, is the goal of the design.
+### Who can you meet?
 
-The ActivityPub spec also says what it does not promise.
+There are too many servers to say in one line. There are towns for hobby groups, people who draw or write, people who build things, and people who share a language. Looking around server about pages and [joinfediverse.kr](https://joinfediverse.kr) gives you a feel for the mood.
 
-- [icon:plug-zap] That the other server stays open: it says there is no guarantee that actors on the network will remain reachable.
-- [icon:send] That a post you send always arrives: retrying after a failed delivery is only "recommended".
-- [icon:trash-2] That a deleted post is deleted on other servers: it says nothing in the protocol can enforce deleting a post that sits on another server.
-- [icon:at-sign] That your address stays the same when you leave a server: an account's ID is an address that belongs to the server where it was made. When you move, you announce "I moved" and your followers follow. The steps are in [Moving servers](/basics/moving).
+### A first step
 
-### What servers promise instead
-
-So each server makes its own promises. Mastodon servers listed on the server picker at joinmastodon.org promise four things.
-
-- [icon:shield-check] Active moderation against racism, sexism, homophobia and transphobia
-- [icon:database-backup] Daily backups
-- [icon:key-round] One more person besides the admin who can get into the server in an emergency
-- [icon:calendar-clock] At least three months' notice before closing
-
-Rules and codes of conduct differ from server to server too. You can read them on the server's about page.
-
-### Who made it, and who keeps it going?
-
-ActivityPub was settled at the W3C, the web standards body, and became a recommendation in 2018. Today a W3C working group (the Social Web Working Group) maintains it. Changing the spec needs at least two independent implementations, and anyone can submit an extension proposal (a FEP).
-
-### If you are new
-
-You do not need to think too long about which server to pick. Read the rules on its about page, and if it does not suit you, you can move. The steps are in [Moving servers](/basics/moving).
+1. Pick a server. Read its rules, and sign up if it seems right.
+2. Write a short intro. Put things you like in hashtags, and people who share them can find you.
+3. Follow hashtags and people that interest you.
+4. If it does not suit you, move. Your followers come along.
 
 :::cards
-- [icon:file-text] **ActivityPub spec** — The original text of what it promises and does not — [Read](https://www.w3.org/TR/activitypub/)
-- [icon:book-open] **Social Web Protocols** — A document on what kind of web the agreement is for — [Read](https://www.w3.org/TR/social-web-protocols/)
-- [icon:handshake] **Mastodon Server Covenant** — Four things listed servers agree to keep — [Read](https://joinmastodon.org/covenant)
 - [icon:map] **joinfediverse.kr** — For choosing a new home — [Look around](https://joinfediverse.kr)
 - [icon:arrow-right] **Moving servers** — When you move to another server — [Read](/basics/moving)
+- [icon:handshake] **Mastodon Server Covenant** — Four things listed servers agree to keep — [Read](https://joinmastodon.org/covenant)
+- [icon:file-text] **ActivityPub spec** — The original text of what it does not promise — [Read](https://www.w3.org/TR/activitypub/)
 :::
