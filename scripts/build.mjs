@@ -22,7 +22,8 @@
 // `lead` is the paragraph right after the title, on one line — the site uses
 // it for cards that link to the page.
 //
-// Each file also carries its credits, read from git history (CI checks out
+// Each file also carries when it last changed (`updated`, the last commit's
+// date, ISO 8601; the desk's page picker sorts and labels by it), and its credits, read from git history (CI checks out
 // the whole history for this):
 //   credits: { authors: [{ name, ai }], assisted: [name] }
 // authors are commit authors, oldest first; ai marks an AI (Claude's commits
@@ -89,6 +90,15 @@ function credits(path, rev = 'HEAD') {
   return authors.size ? { authors: [...authors.values()], assisted: [...assisted] } : null;
 }
 
+// When the file last changed, from its last commit; null when not a git checkout
+function updated(path) {
+  try {
+    return git(['log', '-1', '--format=%cI', '--', path]).trim() || null;
+  } catch {
+    return null;
+  }
+}
+
 // The last commit that sent this file from write, and the file as it was
 // then; null when no one has yet.
 function passed(path) {
@@ -146,6 +156,7 @@ for (const file of walk(contentDir)) {
     path: `content/${rel}`,
     sha256: createHash('sha256').update(markdown).digest('hex'),
     credits: credits(`content/${rel}`),
+    updated: updated(`content/${rel}`),
     published: pass && {
       sha256: createHash('sha256').update(pass.text).digest('hex'),
       commit: pass.commit,
