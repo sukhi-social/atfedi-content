@@ -48,7 +48,7 @@ import { paragraphs, unwrap, check } from './markdown.mjs';
 
 const LANGS = ['en', 'ja', 'ko'];
 // the language each section was first written in; others are compared to it
-const SOURCE_LANG = { basics: 'ko', 'tool-pages': 'en' };
+const SOURCE_LANG = { about: 'ja', basics: 'ko', 'tool-pages': 'en' };
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const contentDir = join(root, 'content');
