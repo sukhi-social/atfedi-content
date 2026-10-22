@@ -20,6 +20,34 @@ content/<section>/<name>.<lang>.md
 Every page exists in `en`, `ja` and `ko`. A page starts with a `## Title`
 line and its lead paragraph.
 
+## The blog's posts
+
+`content/posts/<slug>.<lang>.md` are the posts of
+[blog.atfedi.de](https://blog.atfedi.de). They are pages like the others, with
+two differences: a post may exist in only some of the three languages, and it
+starts with a short front matter block, then its `## Title`:
+
+```
+---
+description: The blurb for link previews and search results.
+summary: (optional) the longer blurb federated Article readers see.
+date: 2026-07-08
+author: shiro_mudita
+lang: ko (optional: only when the original isn't Japanese)
+---
+
+## The title
+
+The post. Its sections are `###`, one level lower than in the blog's own
+files, like every page here.
+```
+
+The blog's build reads the versions people sent from write
+([atfedi-de](https://github.com/sukhi-social/atfedi-de), `blog/scripts/sync-posts.mjs`),
+so a change shows on the blog at its next deploy. The posts that came over
+from atfedi-de carry a `Moved-from:` trailer on the commit that moved them:
+they had already been approved there, so that commit counts as a send.
+
 ## Writing and translating
 
 - **One paragraph, one line.** A line break inside a paragraph shows up as a
