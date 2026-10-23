@@ -1,0 +1,17 @@
+---
+description: A few companion tools worth knowing if you spend time on Misskey.
+date: 2026-05-20
+author: shiro_mudita
+---
+
+## Good tools for Misskey
+
+If you spend time on a Misskey server, a handful of small tools make the
+day a little nicer. This post collects the ones worth knowing.
+
+### Where to look
+
+The catalog at [atfedi.de](https://en.atfedi.de/use/) lists them under the **use**
+lane — clients, bridges, and small companion utilities. Start there.
+
+See you in the next one.
