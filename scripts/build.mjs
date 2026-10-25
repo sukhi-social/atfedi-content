@@ -8,7 +8,8 @@
 // languages, named by its path without the language: tool-pages/fedify/index.
 //
 // Errors (the build fails): a file that doesn't fit the layout, an unknown
-// language, a page without its `## Title` line, a doc missing a language, a
+// language, a page without its `## Title` line, a doc missing a language (the
+// blog's posts, under posts/, may exist in only some), a
 // picture that isn't in media/ or isn't named by its own sha256.
 //
 // Pictures live in media/<sha256>.<webp|png|jpg|gif> and pages point at them
@@ -39,6 +40,10 @@
 //   content/<path>             the newest text (the desk)
 //   published/content/<path>   the version people passed (the site)
 //   files[lang].published      { sha256, commit, title, lead, credits } or null
+//
+// A commit that moved a file here unchanged from a place where a person had
+// already approved it carries a `Moved-from: <repo>@<commit>` trailer, and
+// counts as a send too (the blog's posts came over this way).
 
 import { execFileSync } from 'node:child_process';
 import { createHash } from 'node:crypto';
@@ -50,6 +55,10 @@ import { paragraphs, unwrap, check } from './markdown.mjs';
 const LANGS = ['en', 'ja', 'ko'];
 // the language each section was first written in; others are compared to it
 const SOURCE_LANG = { about: 'ja', basics: 'ko', 'tool-pages': 'en' };
+// sections whose pages may exist in only some languages, and are not checked
+// against a source language (a blog post is written in the language it was
+// written in, and written again, not translated, when it is)
+const PARTIAL = new Set(['posts']);
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const contentDir = join(root, 'content');
@@ -99,18 +108,21 @@ function updated(path) {
   }
 }
 
-// The last commit that sent this file from write, and the file as it was
-// then; null when no one has yet.
+// The last commit that sent this file from write (or moved it here from
+// where a person had approved it), and the file as it was then; null when
+// no one has yet.
 function passed(path) {
   let log;
   try {
-    log = git(['log', '--format=%H%x1f%ae', '--', path]);
+    log = git(['log', '--format=%H%x1f%ae%x1f%(trailers:key=Moved-from,valueonly,separator=%x1e)%x1d', '--', path]);
   } catch {
     return null; // not a git checkout
   }
-  for (const line of log.split('\n')) {
-    const [commit, email] = line.split('\x1f');
-    if (commit && DESK_EMAIL.test(email ?? '')) return { commit, text: git(['show', `${commit}:${path}`]) };
+  for (const entry of log.split('\x1d')) {
+    const [commit, email, moved] = entry.trim().split('\x1f');
+    if (commit && (DESK_EMAIL.test(email ?? '') || (moved ?? '').trim())) {
+      return { commit, text: git(['show', `${commit}:${path}`]) };
+    }
   }
   return null;
 }
@@ -189,8 +201,11 @@ for (const d of docs.values()) {
 
 for (const d of docs.values()) {
   const missing = LANGS.filter((l) => !d.files[l]);
-  if (missing.length) error(`content/${d.doc}`, `missing ${missing.join(', ')}`);
+  if (missing.length && !PARTIAL.has(d.doc.split('/')[0])) error(`content/${d.doc}`, `missing ${missing.join(', ')}`);
 
+  // a post in another language is written again, not translated paragraph by
+  // paragraph, so there is nothing to line up
+  if (PARTIAL.has(d.doc.split('/')[0])) continue;
   const src = SOURCE_LANG[d.doc.split('/')[0]] ?? 'en';
   if (!d.text[src]) continue;
   const left = paragraphs(d.text[src]).map(unwrap);
